@@ -3,9 +3,7 @@ require 'csv'
 
 #Parse the given csv
 def parse(file)
-  CSV::Converters[:blank_to_nil] = lambda do |field|
-    field && field.empty? ? nil : field
-  end
+  CSV::Converters[:blank_to_nil] = ->(field) {field && field.empty? ? nil : field}
   CSV::HeaderConverters[:pick_header_title]= lambda do |header|
     if header=="genus"
       return "name"
@@ -22,24 +20,21 @@ def parse(file)
   csv.map!{|row|
     row.to_hash
   }
-
   csv
 end
 
 #after parsing, create an array of Dinosaur objects
-def createDinos(arrayHash)
-  dinoArr=Array.new;
-  arrayHash.each do |dino|
+def create_dinos(array_hash)
+  dino_arr=Array.new;
+  array_hash.each do |dino|
     rex=Dinosaur.new(dino["name"],dino["period"],dino["walking"],dino["weight"],dino["diet"],dino["description"], dino["continent"])
-    dinoArr<<rex
+    dino_arr<<rex
   end
-  dinoArr
+  dino_arr
 end
 
 #Get user input. 
-def promptMode(dinos)
-  input=""
-  while input.downcase != "exit"
+def prompt_mode(dinos)
     puts "Welcome to the Dinodex\n"+
       "You may search using one or more of the following criteria and syntax.\n"+
       "Walking:(Biped|Quadriped) Size:(Big|Small) Diet:(Carnivore|Piscivore|Insectivore)\n"+
@@ -47,19 +42,17 @@ def promptMode(dinos)
       "Continent:(North America|Europe|Africa|Asia|South America)\n"+
       "Please separate search criteria by a comma\n"+
       "Enter \"Exit\" to leave"
-    input= gets.chomp
-    if input.downcase != "exit"
-      criteria=parseInput(input)
-      findMatches(criteria, dinos)
+    unless gets.chomp.downcase == "exit"
+      criteria=parse_input(input)
+      find_matches(criteria, dinos)
     end
-  end
 end
 
 #Parse out the search criteria given by the user
-def parseInput(input)
-  criteriaArray = input.split(',')
+def parse_input(input)
+  criteria_array = input.split(',')
   criteria = Hash.new
-  criteriaArray.each do |block|
+  criteria_array.each do |block|
     criterion=Hash[*(block.split(':').map!{|word|word.strip.downcase})]
     criteria.merge!(criterion)
   end
@@ -67,10 +60,10 @@ def parseInput(input)
 end
 
 #Find the dinos that match the given criteria
-def findMatches(criteria, dinos)
+def find_matches(criteria, dinos)
   begin
     dinos.each do |dino|
-      if dino.matchesCriteria(criteria)
+      if dino.matches_criteria(criteria)
        puts dino
       end
     end
@@ -80,9 +73,9 @@ def findMatches(criteria, dinos)
 end
 
 def main
-  dinoHash= parse(open("./african_dinoaur_export.csv")).concat(parse(open("./dinodex.csv")))
-  dinos=createDinos(dinoHash)
-  promptMode(dinos)
+  dino_hash= parse(open("./african_dinoaur_export.csv")).concat(parse(open("./dinodex.csv")))
+  dinos=create_dinos(dino_hash)
+  prompt_mode(dinos)
 end
 main()
 

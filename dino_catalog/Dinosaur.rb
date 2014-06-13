@@ -12,25 +12,25 @@ class Dinosaur
     @continent=continent||="Africa"
   end
 
-  def big()
+  def big
     @weight>4000
   end
 
-  def small()
-    @weight>0&&weight<4000
+  def small
+    @weight.between(0,4000)
   end
 
-  def matchesCriteria(criteria)
+  def matches_criteria(criteria)
     criteria.each do |key, value|
-      if key =="period"
-         if !self.send(key).downcase.include?(value)
+      if key == "period"
+         unless send(key).downcase.include?(value)
            return false
          end
-      elsif key=="size"
-        if !self.send(value)
+      elsif key == "size"
+        unless send(value)
           return false
         end
-      elsif self.send(key).downcase!=value
+      elsif send(key).downcase != value
         return false
       end
     end
@@ -38,16 +38,16 @@ class Dinosaur
   end
 
   def to_s
-    returnVal="Name: #{@name}\tPeriod: #{@period}\tWalking: #{@walking}\tContinent: #{@continent} "
+    return_val="Name: #{@name}\tPeriod: #{@period}\tWalking: #{@walking}\tContinent: #{@continent} "
     if @weight>0
-      returnVal+="\tWeight: #{@weight} "
+      return_val+="\tWeight: #{@weight} "
     end
     if @diet!=""
-      returnVal+="\tDiet: #{@diet} "
+      return_val+="\tDiet: #{@diet} "
     end
     if @description!=""
-      returnVal+="\tDescription: #{@description}"
+      return_val+="\tDescription: #{@description}"
     end
-    returnVal
+    return_val
   end
 end
