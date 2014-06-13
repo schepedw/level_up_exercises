@@ -38,16 +38,10 @@ class Dinosaur
   end
 
   def to_s
-    return_val="Name: #{@name}\tPeriod: #{@period}\tWalking: #{@walking}\tContinent: #{@continent} "
-    if @weight>0
-      return_val+="\tWeight: #{@weight} "
-    end
-    if @diet!=""
-      return_val+="\tDiet: #{@diet} "
-    end
-    if @description!=""
-      return_val+="\tDescription: #{@description}"
-    end
+    return_val="Name: %-21s Period: %-20s Walking: %-13s Continent: %-15s "% [@name, @period,@walking,@continent]
+    return_val+="Weight (lbs): %-7d"% [@weight] if @weight>0
+    return_val+="Diet: %-15s " % [@diet] if @diet!=""
+    return_val+="Description: #{@description}" if @description!=""
     return_val
   end
 end

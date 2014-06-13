@@ -1,26 +1,22 @@
 require './Dinosaur'
 require 'csv'
-
+require 'pry'
 #Parse the given csv
 def parse(file)
   CSV::Converters[:blank_to_nil] = ->(field) {field && field.empty? ? nil : field}
-  CSV::HeaderConverters[:pick_header_title]= lambda do |header|
-    if header=="genus"
-      return "name"
-    elsif header=="weight_in_lbs"
-      return "weight"
-    elsif header=="carnivore"
-      return "diet"
-    else
-      return header
-    end
+  CSV::HeaderConverters[:pick_header_title]= lambda do |header| #Can this be put somewhere else and passed in? Is that really any better?
+    returnVal=header
+    returnVal = header=="genus" ? "name" : returnVal
+    returnVal = header=="weight_in_lbs" ? "weight" : returnVal
+    returnVal = header=="carnivore" ? "diet" : returnVal
+    returnVal
   end
   csv=CSV.new(file, :headers=>true, :header_converters=>[:downcase,:pick_header_title], :converters=>[:integer,:blank_to_nil])
   csv=Array(csv)
-  csv.map!{|row|
-    row.to_hash
-  }
+  csv.map!{|row| row.to_hash }
   csv
+
+
 end
 
 #after parsing, create an array of Dinosaur objects
@@ -33,7 +29,7 @@ def create_dinos(array_hash)
   dino_arr
 end
 
-#Get user input. 
+#Get user input
 def prompt_mode(dinos)
     puts "Welcome to the Dinodex\n"+
       "You may search using one or more of the following criteria and syntax.\n"+
@@ -42,7 +38,7 @@ def prompt_mode(dinos)
       "Continent:(North America|Europe|Africa|Asia|South America)\n"+
       "Please separate search criteria by a comma\n"+
       "Enter \"Exit\" to leave"
-    unless gets.chomp.downcase == "exit"
+    while (input=gets.chomp.downcase) != "exit"
       criteria=parse_input(input)
       find_matches(criteria, dinos)
     end
