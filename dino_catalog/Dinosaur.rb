@@ -1,37 +1,37 @@
 #Representation of a dinosaur
 class Dinosaur
+  LARGE_WEIGHT_CUTOFF = 4000
   attr_reader :name, :period, :diet, :weight, :walking, :diet, :description, :continent
-  def initialize(name, period, walking, weight,diet, description,continent)
-    diet= diet=="Yes"? "Carnivore" : "Herbivore"
-    @name=name
-    @period=period
-    @weight=weight||=-1
-    @walking=walking
-    @diet=diet||=""
-    @description=description||=""
-    @continent=continent||="Africa"
+  def initialize(attributes)
+    @diet=attributes["diet"]
+    @name=attributes["name"]
+    @period=attributes["period"]
+    @weight=attributes["weight"] ||= -1
+    @walking=attributes["walking"]
+    @description=attributes["description"] ||= ""
+    @continent=attributes["continent"]
   end
 
-  def big
-    @weight>4000
+  def big?
+    @weight>LARGE_WEIGHT_CUTOFF
   end
+  alias_method :big, :big?
 
-  def small
-    @weight.between(0,4000)
+
+  def small?
+    @weight.between?(0,LARGE_WEIGHT_CUTOFF)
   end
+  alias_method :small, :small?
 
   def matches_criteria(criteria)
     criteria.each do |key, value|
-      if key == "period"
-         unless send(key).downcase.include?(value)
-           return false
-         end
-      elsif key == "size"
-        unless send(value)
-          return false
-        end
-      elsif send(key).downcase != value
-        return false
+      case key
+      when "period"
+        return false unless send(key).downcase.include?(value)
+      when "size"
+       return false unless send(value)
+      else
+        return false unless send(key).downcase == value
       end
     end
     true
