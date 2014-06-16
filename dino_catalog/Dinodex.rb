@@ -15,6 +15,7 @@ def create_dinos(dino_hash)
 end
 
 #Get user input
+#TODO: Add error catching
 def prompt_mode(dinos)
     puts "Welcome to the Dinodex\n"
     puts ( search_criteria =  "You may search using one or more of the following criteria and syntax.\n" +
@@ -23,14 +24,18 @@ def prompt_mode(dinos)
       "Continent:(North America|Europe|Africa|Asia|South America)\n" +
       "Please separate search criteria by a comma\n" +
       "Enter \"Exit\" to leave\n\n")
-    while (input=gets.chomp.downcase) != "exit"
-      criteria=parse_input(input)
-      find_matches(criteria, dinos).each do |match|
+    loop do 
+      exit if (input=gets.chomp.downcase) == "exit"
+      begin 
+        criteria=parse_input(input)
+        find_matches(criteria, dinos).each do |match|
           puts match.to_s + "\n"
+        end
+      rescue NoMethodError
+        puts "---------Error: Invalid Search Criteria or Syntax-------------"
       end
       puts "\n" + search_criteria
     end
-
 end
 
 #Parse out the search criteria given by the user
@@ -50,10 +55,10 @@ def find_matches(criteria, dinos)
 end
 
 def main
-  dino_hash= Parser.parse_african_dinos(open("./african_dinoaur_export.csv")).concat(Parser.parse_dinodex(open("./dinodex.csv")))
+  dino_hash= Parser.parse_african_dinos(open("./african_dinoaur_export.csv"))
+              .concat(Parser.parse_dinodex(open("./dinodex.csv")))
   dinos=create_dinos(dino_hash)
   prompt_mode(dinos)
 end
 main()
-
 
