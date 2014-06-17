@@ -3,7 +3,7 @@ class Dinosaur
 
   LARGE_WEIGHT_CUTOFF = 4000
 
-  attr_reader :name, :period, :diet, :weight, :walking, :diet, :description, :continent
+  attr_reader :name, :period, :diet, :weight, :walking, :diet, :description, :continent, :size
 
   def initialize(attributes)
     @diet = attributes["diet"]
@@ -20,26 +20,23 @@ class Dinosaur
   end
   alias_method :big, :big?
 
-
   def small?
     @weight.between?(0,LARGE_WEIGHT_CUTOFF)
   end
   alias_method :small, :small?
 
   def matches_criteria(criteria)
-    criteria.each do |key, value|
-      case key
-      when "period"
-        return false unless send(key).downcase.include?(value)
-      when "size"
-       return false unless send(value)
-      else
-        return false unless send(key).downcase == value
-      end
-    end
-    true
+    criteria.all?{|criterion, value| matches_criterion(criterion, value)}
   end
 
+  def matches_criterion(criterion, value)
+    raise InvalidSearchCriteriaError, "#{criterion} is not a valid search criterion" unless is_valid_criterion?(criterion)
+    case criterion 
+      when "period" then send(criterion).downcase.include?(value)
+      when "weight" then send(value)
+      else send(criterion).downcase == value
+    end
+  end
 
   def to_s
     return_val = "Name: %-21s Period: %-20s Walking: %-13s Continent: %-15s " % [@name, @period, @walking, @continent]
@@ -48,6 +45,11 @@ class Dinosaur
     return_val += "Description: #{@description}" if @description != ""
     return_val
   end
+
+  def is_valid_criterion?(criterion)
+    instance_variables.include?("@#{criterion}".to_sym)
+  end
+
 end
 
-class InvalidSearchCriteria <RuntimeError; end
+class InvalidSearchCriteriaError < RuntimeError; end
