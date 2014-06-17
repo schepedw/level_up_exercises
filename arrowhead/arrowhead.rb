@@ -30,6 +30,4 @@ class Arrowhead
 
 end
 
-
-
 puts Arrowhead::classify(:far_west, :notched)

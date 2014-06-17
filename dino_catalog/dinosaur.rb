@@ -1,4 +1,7 @@
 #Representation of a dinosaur
+
+class InvalidSearchCriteriaError < RuntimeError; end
+
 class Dinosaur
 
   LARGE_WEIGHT_CUTOFF = 4000
@@ -45,11 +48,11 @@ class Dinosaur
     return_val += "Description: #{@description}" if @description != ""
     return_val
   end
-
+  
+  private
   def is_valid_criterion?(criterion)
     instance_variables.include?("@#{criterion}".to_sym)
   end
 
 end
 
-class InvalidSearchCriteriaError < RuntimeError; end

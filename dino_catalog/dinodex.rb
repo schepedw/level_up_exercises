@@ -9,7 +9,7 @@ class Dinodex
     parser = Parser.new
     dino_hash = parser.parse_african_dinos(open("./african_dinoaur_export.csv"))
                       .concat(parser.parse_dinodex(open("./dinodex.csv")))
-    @dinos=create_dinos(dino_hash)
+    @dinos = create_dinos(dino_hash)
   end
 
 
@@ -59,12 +59,12 @@ class Dinodex
   #Parse out the search criteria given by the user
   def parse_input(input)
     input.split(',').inject({}) do |criteria,criterion| 
-      parsed_criterion = parse_criterion(criteria,criterion)
+      parsed_criterion = parse_criterion(criterion)
       criteria.merge(parsed_criterion)
     end
   end
 
-  def parse_criterion(criteria,input)
+  def parse_criterion(input)
       key_value_array = input.split(':').map(&:strip)
       Hash[*key_value_array] 
   end

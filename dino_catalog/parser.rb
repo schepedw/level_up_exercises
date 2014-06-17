@@ -19,7 +19,7 @@ class Parser
     dinos = parse_dinodex(file)
     dinos.each do |row| 
       row["continent"] = "Africa"
-      row["diet"] = row["diet"] == "Yes" ? "Carnivore":"Herbivore"
+      row["diet"] = row["diet"] == "Yes" ? "Carnivore" : "Herbivore"
      end
   end
 
