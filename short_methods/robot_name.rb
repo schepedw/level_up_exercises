@@ -8,7 +8,13 @@ class Robot
   def initialize(args = {})
     @@registry ||= []
     @name_generator = args[:name_generator]
-    generateName
+    begin
+      generateName
+    rescue NameCollisionError => e
+      puts e.message
+      @name_generator = nil
+      retry
+    end
   end
 
   def generateName
@@ -20,15 +26,17 @@ class Robot
       @name = "#{generate_char.call}#{generate_char.call}#{generate_num.call}#{generate_num.call}#{generate_num.call}"
     end
 
-    raise NameCollisionError, 'There was a problem generating the robot name!' if !(name =~ /\w{2|\d{3}/) || @@registry.include?(name)
+    raise NameCollisionError, "There was a problem generating the robot name! #{name} does not work" if !(name =~ /\w{2|\d{3}/) || @@registry.include?(name)
     @@registry << @name
   end
 
 end
-#robot = Robot.new
-#puts "My pet robot's name is #{robot.name}, but we usually call him sparky."
+robot = Robot.new
+puts "My pet robot's name is #{robot.name}, but we usually call him sparky."
 
 #Errors!
  generator = -> { 'AA111' }
- Robot.new(name_generator: generator)
- Robot.new(name_generator: generator)
+robot = Robot.new(name_generator: generator)
+puts "My pet robot's name is #{robot.name}, but we usually call him sparky."
+robot = Robot.new(name_generator: generator)
+puts "My pet robot's name is #{robot.name}, but we usually call him sparky."
