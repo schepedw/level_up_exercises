@@ -25,8 +25,7 @@ class Robot
       generate_num = -> { rand(10) }
       @name = "#{generate_char.call}#{generate_char.call}#{generate_num.call}#{generate_num.call}#{generate_num.call}"
     end
-
-    raise NameCollisionError, "There was a problem generating the robot name! #{name} does not work" if !(name =~ /\w{2|\d{3}/) || @@registry.include?(name)
+    raise NameCollisionError, 'There was a problem generating the robot name!' if !(name =~ /[[:alpha:]]{2}[[:digit:]]{3}/) || @@registry.include?(name)
     @@registry << @name
   end
 
