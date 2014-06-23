@@ -22,10 +22,9 @@ class JSON_Parser
 
   def separate_cohorts_and_results
     @parsed_file.each  do |log_entry|
-      if log_entry["result"] == 1
-        increment_successes(log_entry)
-      else
-        increment_failures(log_entry)
+      case log_entry["result"]
+        when 1 then increment_successes(log_entry)
+        when 0 then increment_failures(log_entry)
       end
     end
   end
@@ -35,18 +34,16 @@ class JSON_Parser
   end
 
   def increment_failures(log_entry)
-    if log_entry["cohort"] == "A" 
-      @a_failures += 1
-    else 
-      @b_failures +=1
+    case log_entry["cohort"]
+      when "A" then @a_failures += 1
+      when "B" then @b_failures += 1
     end
   end
 
   def increment_successes(log_entry)
-    if log_entry["cohort"] == "A" 
-      @a_successes += 1
-    else 
-      @b_successes +=1
+    case log_entry["cohort"]
+      when "A" then @a_successes += 1
+      when "B" then @b_successes += 1
     end
   end
 
