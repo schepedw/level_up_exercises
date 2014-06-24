@@ -1,15 +1,20 @@
-#encoding: utf-8
-Feature: Bomb tracks incorrect attempts to deactivate
-  In order to keep non-villains from turning the bomb off
-  As a supervillain
-  The bomb should explode after 3 consecutive incorrect attempts to deactive
+Given(/^an active bomb$/) do
+  pending # express the regexp above with the code you wish you had
+end
 
-  Scenario: Attempting to deactivate bomb
-    Given an active bomb
-    When I enter the incorrect deactivation code
-    Then the number of incorrect attempts is incremented by 1
+When(/^I enter the incorrect deactivation code$/) do
+  pending # express the regexp above with the code you wish you had
+end
 
-  Scenario: Third unsuccessful attempt to deactivate bomb
-    Given an active bomb with 2 incorrect attempts
-    When I enter the incorrect deactivation code
-    Then the bomb explodes
+Then(/^the number of incorrect attempts is incremented by (\d+)$/) do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+Given(/^an active bomb with (\d+) incorrect attempts$/) do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^the bomb explodes$/) do
+  pending # express the regexp above with the code you wish you had
+end
+

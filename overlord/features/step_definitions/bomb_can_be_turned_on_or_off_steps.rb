@@ -1,19 +1,32 @@
-#encoding: utf -8
-Feature: Change the current state of the bomb
-  In order to reverse the bomb's current state (on->off)/(off->on)
-  As a supervillain
-  I should be able to enter the correct activation/deacitivation code, and change the bomb's state
+Given(/^an inactive bomb$/) do
+  pending # express the regexp above with the code you wish you had
+end
 
-  Scenario: Turning a bomb on
-    Given an inactive bomb
-    When I enter the correct activation code
-    Then the bomb is activated
-    And the timer begins counting down from its current state
+When(/^I enter the correct activation code$/) do
+  pending # express the regexp above with the code you wish you had
+end
 
-  Scenario: Turning a bomb off
-    Given an active bomb
-    When I enter the correct deactivation code
-    Then the bomb is deactivated
-    And the number of incorrect attempts is 0
-    And the timer stops at its current state
+Then(/^the bomb is activated$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^the timer begins counting down from its current state$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+When(/^I enter the correct deactivation code$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^the bomb is deactivated$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^the number of incorrect attempts is (\d+)$/) do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^the timer stops at its current state$/) do
+  pending # express the regexp above with the code you wish you had
+end
 

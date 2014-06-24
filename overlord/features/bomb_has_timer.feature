@@ -1,4 +1,3 @@
-#encoding: utf-8
 Feature: Bomb has timer
   In order to give a countdown to the bomb exploding
   As a supervillain

@@ -1,4 +1,3 @@
-#encoding: utf-8
 Feature: Bomb tracks incorrect attempts to deactivate
   In order to keep non-villains from turning the bomb off
   As a supervillain

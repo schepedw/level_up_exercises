@@ -1,4 +1,3 @@
-#encoding: utf -8
 Feature: Change the current state of the bomb
   In order to reverse the bomb's current state (on->off)/(off->on)
   As a supervillain

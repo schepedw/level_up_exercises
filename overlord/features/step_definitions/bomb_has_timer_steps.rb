@@ -1,20 +1,24 @@
-#encoding: utf-8
-Feature: Bomb has timer
-  In order to give a countdown to the bomb exploding
-  As a supervillain
-  I should be able to see the time left until an activated bomb explodes
+When(/^I activate it$/) do
+  pending # express the regexp above with the code you wish you had
+end
 
-  Scenario: Starting timer
-    Given an inactive bomb
-    When I activate it
-    Then the bomb's timer should start counting down from its current state
+Then(/^the bomb's timer should start counting down from its current state$/) do
+  pending # express the regexp above with the code you wish you had
+end
 
-  Scenario: Timer reaches 0
-    Given an active bomb
-    When the timer reaches 0
-    Then the bomb explodes
+When(/^the timer reaches (\d+)$/) do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
 
- Scenario: Bomb has exploded
-    Given an exploded bomb
-    When I give it any input
-    Then nothing should happen
+Given(/^an exploded bomb$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+When(/^I give it any input$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^nothing should happen$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
