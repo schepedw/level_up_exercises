@@ -1,53 +1,60 @@
 require './json_parser.rb'
-require 'pry'
+
 class Split_Test
   CONVERT_SSE_TO_GIVE_95PERCENT_CONFIDENCE = 1.96
-  attr_reader :trials,:successes, :failures, :standard_squared_error, :conversion_rate, :conversion_range
+
+  P_VALUES = {
+    (0..0.454) => 0,
+    (0.454..2.705) => 0.5,
+    (2.705..3.840) => 0.1,
+    (3.840..5.411) => 0.05,
+    (5.411..6.634) => 0.02,
+    (6.634..10.826) => 0.01,
+    (10.826..Float::INFINITY) => 0.001
+  }
+
+  attr_reader :trials, :successes, :failures
 
   def initialize(trials, successes)
+    raise ArgumentError, "cannot have more successes than trials" unless successes <= trials
+    raise ArgumentError, "cannot have 0 trials" unless trials > 0
+    raise ArgumentError, "cannot have not-integer trials or successes" unless successes.is_a? Integer and trials.is_a? Integer
     @trials = trials
     @successes = successes
     @failures = trials - successes
-    @conversion_rate = calculate_conversion_rate(@trials, @successes)
-    @standard_squared_error = calculate_SSE(@conversion_rate, @successes)
-    @conversion_range = calculate_conversion_range(@standard_squared_error, @conversion_rate)
   end
 
-  def calculate_conversion_rate(trial_count, successes_count)
-    1.0 * successes_count / trial_count
+  def conversion_rate
+    1.0 * successes / trials
   end
 
-  def calculate_SSE(conversion_rate, num_trials)
-    Math.sqrt(conversion_rate * (1.0 - conversion_rate) / num_trials)
+  def standard_squared_error
+    Math.sqrt(conversion_rate * (1.0 - conversion_rate) / trials)
   end
 
-  def calculate_conversion_range(sse, conversion_rate)
-    sse *= CONVERT_SSE_TO_GIVE_95PERCENT_CONFIDENCE
-    low = conversion_rate - sse
-    high = conversion_rate + sse
-    low .. high
+  def conversion_range
+    low = conversion_rate - (standard_squared_error * CONVERT_SSE_TO_GIVE_95PERCENT_CONFIDENCE)
+    high = conversion_rate + (standard_squared_error * CONVERT_SSE_TO_GIVE_95PERCENT_CONFIDENCE)
+    (low..high)
   end
 
-  def calculate_chi_squared_value(a_successes = @successes, a_failures = @failures, b_successes, b_failures)
-    total = a_successes + a_failures + b_successes + b_failures
-    1.0 * total * (a_successes * b_failures - b_successes * a_failures) ** 2 /
-      ((a_successes + a_failures) * (a_successes + b_successes) * (b_successes + b_failures) *
-        (a_failures + b_failures))
+  def confidence_level_with(other_split_test)
+    chi_squared_value = chi_squared_value(other_split_test)
+    p_range = P_VALUES.detect{|range, _| range.include? chi_squared_value}
+    p_value = p_range[1]
+    1 - p_value
   end
 
-  def calculate_confidence_level(chi_square_value) 
-    alpha = 
-      case
-        when chi_square_value.between?(0, 0.454) then 0
-        when chi_square_value.between?(0.455, 2.705) then 0.5
-        when chi_square_value.between?(2.706, 3.840) then 0.1
-        when chi_square_value.between?(3.841, 5.411) then 0.05
-        when chi_square_value.between?(5.412, 6.634) then 0.02
-        when chi_square_value.between?(6.635, 10.826) then 0.01
-        when chi_square_value >= 10.827 then 0.001
-      end
-    1 - alpha
-  end
+  private
 
+  def chi_squared_value(other_split_test)
+    #raise ArgumentError, "#{other_split_test} must have successes & failures"
+    b_successes = other_split_test.successes
+    b_failures = other_split_test.failures
+    total = successes + failures + b_successes + b_failures
+    1.0 * total * (successes * b_failures - b_successes * failures) ** 2 /
+      ((successes + failures) * (successes + b_successes) * (b_successes + b_failures) *
+        (failures + b_failures))
+  end
 
 end

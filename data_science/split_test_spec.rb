@@ -1,16 +1,27 @@
-require './split_test.rb'
 require 'spec_helper'
-require 'rspec/its'
-require 'rspec/expectations'
 
 describe Split_Test do
-  let(:split_test){Split_Test.new(10,5)}
-  subject{split_test}
-  it {should respond_to(:calculate_conversion_rate)}
-  it {should respond_to(:calculate_SSE)}
-  it {should respond_to(:calculate_conversion_range)}
-  it {should respond_to(:calculate_chi_squared_value)}
-  it {should respond_to(:calculate_confidence_level)}
+
+  it "should allow successes | successes <= trials" do
+    expect { Split_Test.new(10, 11).to raise_error(ArgumentError) }
+  end
+
+  it "should only allow integer trials/successes" do
+    expect { Split_Test.new(3, 2.5).to raise_error(ArgumentError) }
+    expect { Split_Test.new(3.5, 3).to raise_error(ArgumentError) }
+    expect { Split_Test.new(3.5, 3.3).to raise_error(ArgumentError) }
+  end
+
+  let(:split_test) { Split_Test.new(10, 5) }
+  let(:split_test2) { Split_Test.new(100,5) }
+  let(:border_alpha_values) { [0, 0.455, 2.706, 3.841, 5.412, 6.635, 10.827] }
+  let(:corresponding_p_values) { [0, 0.5, 0.1, 0.05, 0.02, 0.01, 0.001] }
+  subject{ split_test }
+
+  it "should only allow objects that have successes and failures for confidence level comparison" do
+    expect{ split_test.confidence_level_with(3).to raise_error(NoMethodError) }
+  end
+
   it "should be able to save input values" do
     expect split_test.trials == 10
     expect split_test.successes == 5
@@ -18,46 +29,33 @@ describe Split_Test do
   end
 
   it "should be able to correctly calculate conversion rate" do
-    test1 = split_test.calculate_conversion_rate(1000, 500)
-    test2 = split_test.calculate_conversion_rate(1000, 1000)
-    expect (test1).should be_within(0.001).of(0.5)
-    expect (test2).should be_within(0.001).of(1.0)
+    test1 = split_test.conversion_rate
+    expect(test1).to be_within(0.001).of(0.5)
   end
 
-  it "should be able to correctly calculate SSE" do
-    test1 = split_test.calculate_SSE(1, 2) 
-    test2 = split_test.calculate_SSE(0.5,3)
-    expect (test1).should be_within(0.001).of(0.0)
-    expect (test2).should be_within(0.001).of(0.289)
+  it "should be able to correctly calculate sse" do
+    test1 = split_test.standard_squared_error
+    expect(test1).to be_within(0.001).of(0.158)
   end
 
   it "should be able to give conversion rate range" do 
-    test1 = split_test.calculate_conversion_range(0.02, 0.5)
+    test1 = split_test.conversion_range
     range_min = test1.min
     range_max = test1.max
-    expect (range_min).should be_within(0.001).of(0.461)
-    expect (range_max).should be_within(0.001).of(0.539)
+    expect(range_min).to be_within(0.001).of(0.190)
+    expect(range_max).to be_within(0.001).of(0.809)
   end
 
-  it "should be able to calculate chi_square statistic" do
-    chi_square = split_test.calculate_chi_squared_value(23, 1507, 33, 1312)
-    expect chi_square.should be_within(0.001).of(3.384)
+  it "should be able to get p_values" do
+    border_alpha_values.each_with_index do |alpha, index|
+      observed_p_val =  Split_Test::P_VALUES.detect{|range, _| range.include? alpha}
+      expect(corresponding_p_values[index]).to eq(observed_p_val[1])
+    end
   end
 
   it "should be able calculate confidence level" do
-    confidence_50 = split_test.calculate_confidence_level(0.456)
-    confidence_90 = split_test.calculate_confidence_level(2.707)
-    confidence_95 = split_test.calculate_confidence_level(3.842)
-    confidence_98 = split_test.calculate_confidence_level(5.413)
-    confidence_99 = split_test.calculate_confidence_level(6.636)
-    confidence_999 = split_test.calculate_confidence_level(10.828)
-    expect confidence_50 == 0.5
-    expect confidence_90 ==0.90
-    expect confidence_95 == 0.95
-    expect confidence_98 == 0.98
-    expect confidence_99 == 0.99
-    expect confidence_999 == 0.999
+    confidence_level = split_test.confidence_level_with(split_test2)
+    expect(confidence_level).to eq(0.999)
   end
-  
 
 end

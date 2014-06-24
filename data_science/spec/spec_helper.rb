@@ -14,6 +14,10 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require '/Users/Daniel/Documents/levelUP/level_up_exercises/data_science/json_parser.rb'
+require '/Users/Daniel/Documents/levelUP/level_up_exercises/data_science/split_test.rb'
+require 'rspec/its'
+
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.

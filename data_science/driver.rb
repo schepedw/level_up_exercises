@@ -22,12 +22,14 @@ def print_winner_and_confidence_level(a_conversion_rate, b_conversion_rate, conf
   puts "The confidence level in these findings is #{confidence_level * 100}%"
 end
 
-data_set = JSON_Parser.new("source_data.json")
+cohorts = Json_Parser.new("source_data.json").cohorts
+a_results = cohorts["A"]
+b_results = cohorts["B"]
 
-before_data = Split_Test.new(data_set.get_all_a_trials, data_set.a_successes)
-after_data = Split_Test.new(data_set.get_all_b_trials, data_set.b_successes)
-chi_squared = after_data.calculate_chi_squared_value(before_data.successes, before_data.failures)
-confidence_level = after_data.calculate_confidence_level(chi_squared)
+
+before_data = Split_Test.new(a_results["trials"],a_results["successes"])
+after_data = Split_Test.new(b_results["trials"],b_results["successes"])
+confidence_level = after_data.confidence_level_with(before_data)
 
 print_tests_and_successes(before_data.trials, before_data.successes, after_data.trials, after_data.successes)
 print_conversion_ranges(before_data, after_data)
