@@ -5,11 +5,11 @@ Feature: Bomb tracks incorrect attempts to deactivate
   The bomb should explode after 3 consecutive incorrect attempts to deactive
 
   Scenario: Attempting to deactivate bomb
-    Given an activated bomb
+    Given an active bomb
     When I enter the incorrect deactivation code
     Then the number of incorrect attempts is incremented by 1
 
   Scenario: Third unsuccessful attempt to deactivate bomb
-    Given an actived bomb with 2 incorrect attempts
+    Given an active bomb with 2 incorrect attempts
     When I enter the incorrect deactivation code
     Then the bomb explodes
