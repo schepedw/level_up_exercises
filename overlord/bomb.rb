@@ -3,21 +3,45 @@ require 'active_record'
 require 'sinatra/activerecord'
 require 'pry'
 class Bomb < ActiveRecord::Base
-#  has_one :activation_code
- # has_one :status
- # has_one :deactivation_code
+
+  attr_accessor :activation_code, :deactivation_code, :status
+
   validates_presence_of :activation_code, :deactivation_code, :status
-  after_initialize :init
-  
-  def init
-    self.activation_code ||= "1234"
-    self.deactivation_code ||= "0000"
+  after_initialize :write_attributes
+  def initialize(codes_hash = {})
+    codes_hash ||= {}
+    self.activation_code = codes_hash["activation_code"] || "1234"
+    self.deactivation_code = codes_hash["deactivation_code"] || "0000"
     self.status = "inactive"
-    validate_input_code(self.activation_code)
-    validate_input_code(self.activation_code)
+    validate_input_code(activation_code)
+    validate_input_code(deactivation_code)
+    super()
   end
+
+  def write_attributes
+    binding.pry
+    write_attribute(:activation_code, activation_code)
+    write_attribute(:deactivation_code, deactivation_code)
+    write_attribute(:status, status)
+  end
+
   ACTIVE_STATES = ["active", "one_wrong_guess", "two_wrong_guesses"]
 
+
+  def input_code(code)
+    if (code == self.activation_code and self.status == "inactive") or
+      (code == self.deactivation_code and ACTIVE_STATES.include?(self.activation_code))
+        puts "CALLING SUPER WITH code =#{code}"
+        self.accept_code()
+    else
+      puts "incorrect code!"
+      incorrect_code()
+    end
+  end
+
+  def validate_input_code(input_code)
+    raise ArgumentError, "#{input_code} is not 4 digits" unless !!(input_code =~ /^[0-9]{4}$/)
+  end
 
   include AASM
   aasm :column => :status do
@@ -44,29 +68,7 @@ class Bomb < ActiveRecord::Base
     end
 
   end
+  protected :accept_code, :incorrect_code, :explode, :activation_code, :activation_code=, :deactivation_code, :deactivation_code=, :status=
 
-  private :accept_code, :incorrect_code, :explode
 
-  def input_code(code)
-    if (code == self.activation_code and self.status == "inactive") or
-      (code == self.deactivation_code and ACTIVE_STATES.include?(self.activation_code))
-        puts "CALLING SUPER WITH code =#{code}"
-        self.accept_code()
-    else
-      puts "incorrect code!"
-      incorrect_code()
-    end
-  end
-
-  def validate_input_code(input_code)
-    raise ArgumentError, "#{input_code} is not 4 digits" unless !!(input_code =~ /^[0-9]{4}$/)
-  end
-
-  private
-  def activation_code
-    self[:activation_code]
-  end
-  def activaiton_code=(val)
-    write_attribute :activaiton_code, val
-  end
 end
