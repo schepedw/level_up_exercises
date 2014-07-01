@@ -12,7 +12,7 @@ class Bomb < ActiveRecord::Base
   def init
     self.activation_code ||= "1234"
     self.deactivation_code ||= "0000"
-    self.status = :inactive
+    self.status = "inactive"
     validate_input_code(self.activation_code)
     validate_input_code(self.activation_code)
   end
@@ -35,6 +35,7 @@ class Bomb < ActiveRecord::Base
       transitions :from => :active, :to => :one_wrong_guess
       transitions :from => :one_wrong_guess, :to => :two_wrong_guesses
       transitions :from => :two_wrong_guesses, :to => :exploded
+      transitions :from => :inactive, :to => :inactive
     end
 
     event :explode do
@@ -42,23 +43,30 @@ class Bomb < ActiveRecord::Base
 
     end
 
-    def accept_code(code)
-      if (code == self.activation_code and self.status == :inactive) or
-        (code == self.deactivation_code and ACTIVE_STATES.include?(self.activation_code))
-          puts "CALLING SUPER WITH code =#{code}"
-          super()
-      else
-        puts "incorrect code!"
-        incorrect_code()
-      end
-    end
-
   end
 
-  private :incorrect_code, :explode
+  private :accept_code, :incorrect_code, :explode
+
+  def input_code(code)
+    if (code == self.activation_code and self.status == "inactive") or
+      (code == self.deactivation_code and ACTIVE_STATES.include?(self.activation_code))
+        puts "CALLING SUPER WITH code =#{code}"
+        self.accept_code()
+    else
+      puts "incorrect code!"
+      incorrect_code()
+    end
+  end
 
   def validate_input_code(input_code)
     raise ArgumentError, "#{input_code} is not 4 digits" unless !!(input_code =~ /^[0-9]{4}$/)
   end
 
+  private
+  def activation_code
+    self[:activation_code]
+  end
+  def activaiton_code=(val)
+    write_attribute :activaiton_code, val
+  end
 end

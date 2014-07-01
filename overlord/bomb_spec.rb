@@ -4,8 +4,8 @@ describe Bomb do
 
   ActiveRecord::Base.establish_connection(
     :adapter => 'postgresql',
-    :dbfile => 'super_villain_test.postgresql.db'
   )
+  set :database, :development
 
   it "should only allow numeric activation/deactivation codes" do
     expect{ Bomb.new("abcd", "1234")}.to raise_error(ArgumentError)

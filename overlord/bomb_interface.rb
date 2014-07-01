@@ -50,7 +50,7 @@ def header
   "
   <head>
     <title> Super Villain's Bomb! </title>
-    <l,ink rel = 'stylesheet' href = 'css/bomb.css'/>
+    <link rel = 'stylesheet' href = 'css/bomb.css'/>
     <script type = 'text/javascript' src = '/js/bomb.js'></script>
   </head>
   "
@@ -59,7 +59,7 @@ end
 def body_content
   "
   <body>
-   <div id = 'outer'>" +
+   <div class = 'outer'>" +
    "bomb state: #{@bomb.status}" +
     activation_field +
    "</div>
