@@ -10,8 +10,8 @@ class Bomb < ActiveRecord::Base
   after_initialize :write_attributes
   def initialize(codes_hash = {})
     codes_hash ||= {}
-    self.activation_code = codes_hash["activation_code"] || "1234"
-    self.deactivation_code = codes_hash["deactivation_code"] || "0000"
+    self.activation_code = codes_hash[:activation_code] || "1234"
+    self.deactivation_code = codes_hash[:deactivation_code] || "0000"
     self.status = "inactive"
     validate_input_code(activation_code)
     validate_input_code(deactivation_code)
@@ -19,22 +19,22 @@ class Bomb < ActiveRecord::Base
   end
 
   def write_attributes
-    binding.pry
     write_attribute(:activation_code, activation_code)
     write_attribute(:deactivation_code, deactivation_code)
     write_attribute(:status, status)
   end
 
   ACTIVE_STATES = ["active", "one_wrong_guess", "two_wrong_guesses"]
-
+  def state
+    read_attribute(:status)
+  end
 
   def input_code(code)
     if (code == self.activation_code and self.status == "inactive") or
-      (code == self.deactivation_code and ACTIVE_STATES.include?(self.activation_code))
-        puts "CALLING SUPER WITH code =#{code}"
-        self.accept_code()
+      (code == self.deactivation_code and ACTIVE_STATES.include?(self.status))
+        accept_code()
     else
-      puts "incorrect code!"
+      binding.pry
       incorrect_code()
     end
   end
@@ -50,8 +50,9 @@ class Bomb < ActiveRecord::Base
     state :one_wrong_guess
     state :two_wrong_guesses
     state :exploded
+
     event :accept_code do
-      transitions :from => :inactive, :to => [:active]
+      transitions :from => :inactive, :to => :active
       transitions :from => [:active, :one_wrong_guess, :two_wrong_guesses], :to => :inactive
     end
 
