@@ -1,0 +1,12 @@
+#outer{
+  background: url(../images/background.jpg);
+  background-repeat: no-repeat;
+  background-size: 600px 600px;
+  height: 600px;
+  width: 600px;
+  margin:auto;
+},
+
+#activation_button{
+  value:"herro";
+}

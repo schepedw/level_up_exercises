@@ -1,59 +1,64 @@
-require 'state_machine'
-
-class Bomb 
-  attr_reader :status
+require 'AASM'
+require 'active_record'
+require 'sinatra/activerecord'
+require 'pry'
+class Bomb < ActiveRecord::Base
+#  has_one :activation_code
+ # has_one :status
+ # has_one :deactivation_code
+  validates_presence_of :activation_code, :deactivation_code, :status
+  after_initialize :init
   
-  def initialize(activation_code, deactivation_code)
-    @status = "inactive"
-    activation_code ||= "1234"
-    deactivation_code ||= "0000"
-    check_input_validity(activation_code)
-    check_input_validity(deactivation_code)
-    @activation_code = activation_code
-    @deactivation_code = deactivation_code
-    @fail_attempts = 0
+  def init
+    self.activation_code ||= "1234"
+    self.deactivation_code ||= "0000"
+    self.status = :inactive
+    validate_input_code(self.activation_code)
+    validate_input_code(self.activation_code)
   end
-
- # def accept_code(input_code)
- #   check_activation_code(input_code) if status == "inactive"
- #   check_deactivation_code(input_code) if status == "active"
- # end
+  ACTIVE_STATES = ["active", "one_wrong_guess", "two_wrong_guesses"]
 
 
-#  private
-
-  state_machine :status, :initial => :inactive do
-    event :switch do
-      transition :active => :inactive
-      transition :inactive => :active
+  include AASM
+  aasm :column => :status do
+    state :inactive
+    state :active
+    state :one_wrong_guess
+    state :two_wrong_guesses
+    state :exploded
+    event :accept_code do
+      transitions :from => :inactive, :to => [:active]
+      transitions :from => [:active, :one_wrong_guess, :two_wrong_guesses], :to => :inactive
     end
 
-    #event :deactivate do
-    #  transition :active => :inactive
-    #end
+    event :incorrect_code do
+      transitions :from => :active, :to => :one_wrong_guess
+      transitions :from => :one_wrong_guess, :to => :two_wrong_guesses
+      transitions :from => :two_wrong_guesses, :to => :exploded
+    end
 
     event :explode do
-      transition :active =>:exploded
+      transitions :from => [:active, :inactive, :one_wrong_guess, :two_wrong_guesses], :to => :exploded
+
     end
+
+    def accept_code(code)
+      if (code == self.activation_code and self.status == :inactive) or
+        (code == self.deactivation_code and ACTIVE_STATES.include?(self.activation_code))
+          puts "CALLING SUPER WITH code =#{code}"
+          super()
+      else
+        puts "incorrect code!"
+        incorrect_code()
+      end
+    end
+
   end
 
+  private :incorrect_code, :explode
 
-
-
-  def check_input_validity(input_code)
-    raise ArgumentError, "Input code must be 4 digits" unless input_code =~ /[[:digit:]]{4}/
+  def validate_input_code(input_code)
+    raise ArgumentError, "#{input_code} is not 4 digits" unless !!(input_code =~ /^[0-9]{4}$/)
   end
 
-#  def check_activation_code(input_code)
- #   @status = "active" if input_code == @activation_code
-#  end
-
-#  def deactivation_code(input_code)
-#    if input_code == @deactivation_code
-#      @status = "inactive"
-#      @fail_attempts = 0
- #   else
-#      @fail_attempts += 1
-#      blow_up if @fail_attempts == 3
-#    end
 end
