@@ -16,11 +16,7 @@ class Bomb < ActiveRecord::Base
     validate_input_code(deactivation_code)
     super()
   end
-
-  def create(attributes = nil, options = {}, &block)
-    initialize(attributes)
-    super(attributes,options,block)
-  end
+ 
   def state
     self[:status]
   end
@@ -74,7 +70,7 @@ class Bomb < ActiveRecord::Base
     end
 
   end
-  protected :accept_code, :incorrect_code, :explode, :activation_code, :activation_code=, :deactivation_code, :deactivation_code=
+  protected :accept_code, :incorrect_code, :explode, :activation_code, :activation_code=#, :deactivation_code# :deactivation_code=
   protected
   def status=(val)
     self[:status] = val
