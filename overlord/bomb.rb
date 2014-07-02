@@ -4,24 +4,22 @@ require 'sinatra/activerecord'
 require 'pry'
 class Bomb < ActiveRecord::Base
 
-  attr_accessor :activation_code, :deactivation_code
-
   validates_presence_of :activation_code, :deactivation_code, :status
-  after_initialize :write_attributes
   def initialize(codes_hash = {})
     codes_hash ||= {}
-    self.activation_code = codes_hash[:activation_code] || "1234"
-    self.deactivation_code = codes_hash[:deactivation_code] || "0000"
+    activation_code = codes_hash[:activation_code] || "1234"
+    deactivation_code = codes_hash[:deactivation_code] || "0000"
     validate_input_code(activation_code)
     validate_input_code(deactivation_code)
     super()
+    write_attributes(activation_code, deactivation_code)
   end
- 
+
   def state
     self[:status]
   end
 
-  def write_attributes
+  def write_attributes(activation_code,deactivation_code)
     write_attribute(:activation_code, activation_code)
     write_attribute(:deactivation_code, deactivation_code)
     write_attribute(:status, "inactive")
@@ -70,10 +68,22 @@ class Bomb < ActiveRecord::Base
     end
 
   end
-  protected :accept_code, :incorrect_code, :explode, :activation_code, :activation_code=#, :deactivation_code# :deactivation_code=
+  protected :accept_code, :incorrect_code, :explode#, :activation_code, :activation_code=#, :deactivation_code# :deactivation_code=
   protected
   def status=(val)
     self[:status] = val
   end
 
+  def activation_code
+    self[:activation_code]
+  end
+  def activation_code=(val)
+    self[:activation_code]=val
+  end
+  def deactivation_code
+    self[:deactivation_code]
+  end
+  def deactivation_code=(val)
+    self[:deactivation_code]=val
+  end
 end
