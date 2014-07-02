@@ -4,7 +4,7 @@ require 'sinatra/activerecord'
 require 'pry'
 class Bomb < ActiveRecord::Base
 
-  attr_accessor :activation_code, :deactivation_code, :status
+  attr_accessor :activation_code, :deactivation_code
 
   validates_presence_of :activation_code, :deactivation_code, :status
   after_initialize :write_attributes
@@ -12,29 +12,34 @@ class Bomb < ActiveRecord::Base
     codes_hash ||= {}
     self.activation_code = codes_hash[:activation_code] || "1234"
     self.deactivation_code = codes_hash[:deactivation_code] || "0000"
-    self.status = "inactive"
     validate_input_code(activation_code)
     validate_input_code(deactivation_code)
     super()
   end
 
+  def create(attributes = nil, options = {}, &block)
+    initialize(attributes)
+    super(attributes,options,block)
+  end
+  def state
+    self[:status]
+  end
+
   def write_attributes
     write_attribute(:activation_code, activation_code)
     write_attribute(:deactivation_code, deactivation_code)
-    write_attribute(:status, status)
+    write_attribute(:status, "inactive")
   end
 
   ACTIVE_STATES = ["active", "one_wrong_guess", "two_wrong_guesses"]
-  def state
-    read_attribute(:status)
-  end
 
   def input_code(code)
-    if (code == self.activation_code and self.status == "inactive") or
-      (code == self.deactivation_code and ACTIVE_STATES.include?(self.status))
+    if (code == activation_code and inactive?) or
+      (code == deactivation_code and ACTIVE_STATES.include?(status))
         accept_code()
+    elsif exploded?
+      return
     else
-      binding.pry
       incorrect_code()
     end
   end
@@ -45,7 +50,7 @@ class Bomb < ActiveRecord::Base
 
   include AASM
   aasm :column => :status do
-    state :inactive
+    state :inactive, :initial => true
     state :active
     state :one_wrong_guess
     state :two_wrong_guesses
@@ -69,7 +74,10 @@ class Bomb < ActiveRecord::Base
     end
 
   end
-  protected :accept_code, :incorrect_code, :explode, :activation_code, :activation_code=, :deactivation_code, :deactivation_code=, :status=
-
+  protected :accept_code, :incorrect_code, :explode, :activation_code, :activation_code=, :deactivation_code, :deactivation_code=
+  protected
+  def status=(val)
+    self[:status] = val
+  end
 
 end

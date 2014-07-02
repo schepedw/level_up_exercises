@@ -60,7 +60,7 @@ def body_content
   "
   <body>
    <div class = 'outer'>" +
-   "bomb state: #{@bomb.status}" +
+   "bomb state: #{@bomb.state}" +
     activation_field +
    "</div>
   </body>"
@@ -77,6 +77,7 @@ end
 
 def check_bomb_status(code)
   puts "bomb = #{@bomb}"
-  @bomb.accept_code(code)
+  @bomb.input_code(code)
+  binding.pry
 end
 
