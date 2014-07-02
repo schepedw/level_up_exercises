@@ -6,3 +6,5 @@ gem 'rake'
 gem 'aasm'
 gem 'sinatra-activerecord'
 gem 'pg'
+gem 'cucumber'
+

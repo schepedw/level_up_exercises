@@ -1,12 +1,21 @@
-.outer{
-  background: url(../images/background.jpg);
+div.outer{
   background-repeat: no-repeat;
-  background-size: 600px 600px;
   height: 600px;
   width: 600px;
   margin:auto;
-},
-
-#activation_button{
-  value:"herro";
 }
+
+div.inactive{
+  background: url(../images/inactive.png);
+}
+
+div.active{
+  background: url(../images/active.jpg);
+}
+
+div.exploded{
+  background: url(../images/exploded.jpg);
+  height: 525px;
+}
+
+

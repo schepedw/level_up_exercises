@@ -59,25 +59,33 @@ end
 def body_content
   "
   <body>
-   <div class = 'outer'>" +
-   "bomb state: #{@bomb.state}" +
+   <div class = 'outer #{state}'>" +
+    "Bomb is #{state}"+
     activation_field +
    "</div>
   </body>"
 end
 
+def state
+  Bomb.ACTIVE_STATES.include?(@bomb.state) ? "active" : @bomb.state
+end
+
+
 def activation_field
-  "<form id = 'code_input' onsubmit = 'say_hi()' action = '/' method = 'post'>
-    <input type ='text' name = 'code' placeholder = 'code'>
-    <input type = 'hidden' name = 'bomb_id' value = '#{@bomb.id}'
-    <input type = 'submit' id = 'activation_button'>
- </form>
- "
+  if @bomb.exploded?
+    ""
+  else
+    "<form id = 'code_input' onsubmit = 'say_hi()' action = '/' method = 'post'>
+      <input type ='text' name = 'code' placeholder = 'code'>
+      <input type = 'hidden' name = 'bomb_id' value = '#{@bomb.id}'
+      <input type = 'submit' id = 'activation_button'>
+       </form>
+    "
+  end
 end
 
 def check_bomb_status(code)
   puts "bomb = #{@bomb}"
   @bomb.input_code(code)
-  binding.pry
 end
 

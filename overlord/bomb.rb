@@ -4,6 +4,10 @@ require 'sinatra/activerecord'
 require 'pry'
 class Bomb < ActiveRecord::Base
 
+  def self.ACTIVE_STATES 
+    ["active", "one_wrong_guess", "two_wrong_guesses"]
+  end
+
   validates_presence_of :activation_code, :deactivation_code, :status
   def initialize(codes_hash = {})
     codes_hash ||= {}
@@ -25,11 +29,10 @@ class Bomb < ActiveRecord::Base
     write_attribute(:status, "inactive")
   end
 
-  ACTIVE_STATES = ["active", "one_wrong_guess", "two_wrong_guesses"]
 
   def input_code(code)
     if (code == activation_code and inactive?) or
-      (code == deactivation_code and ACTIVE_STATES.include?(status))
+      (code == deactivation_code and Bomb.ACTIVE_STATES.include?(status))
         accept_code()
     elsif exploded?
       return
