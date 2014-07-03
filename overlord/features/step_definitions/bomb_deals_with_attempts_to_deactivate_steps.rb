@@ -1,20 +1,19 @@
 Given(/^an active bomb$/) do
-  pending # express the regexp above with the code you wish you had
+  visit "/"
+  fill_in('code', :with => '1234')
+  click_button('activation_button')
 end
 
-When(/^I enter the incorrect deactivation code$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then(/^the number of incorrect attempts is incremented by (\d+)$/) do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
-
-Given(/^an active bomb with (\d+) incorrect attempts$/) do |arg1|
-  pending # express the regexp above with the code you wish you had
+When(/^I enter the incorrect deactivation code (\d+) times$/) do |num|
+  num = num.to_i
+  num.times do
+    fill_in('code', :with => '090990')
+    click_button('activation_button')
+  end
 end
 
 Then(/^the bomb explodes$/) do
-  pending # express the regexp above with the code you wish you had
+  state = find(:css, 'span.state').text
+  expect(state).to eql("exploded")
 end
 

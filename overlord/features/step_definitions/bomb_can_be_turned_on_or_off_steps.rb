@@ -1,21 +1,25 @@
 Given(/^an inactive bomb$/) do
-  pending 
+  visit "/" 
 end
 
 When(/^I enter the correct activation code$/) do
-  pending # express the regexp above with the code you wish you had
+  fill_in('code',:with => '1234')
+  click_button('activation_button')
 end
 
 Then(/^the bomb is activated$/) do
-  pending # express the regexp above with the code you wish you had
+  status = find(:css, 'span.state').text
+  expect(status).to eql("active")
 end
 
 When(/^I enter the correct deactivation code$/) do
-  pending # express the regexp above with the code you wish you had
+  fill_in('code',:with => '1234')
+  click_button('activation_button')
 end
 
 Then(/^the bomb is deactivated$/) do
-  pending # express the regexp above with the code you wish you had
+  status = find(:css, 'span.state').text
+  expect(status).to eql("active")
 end
 
 

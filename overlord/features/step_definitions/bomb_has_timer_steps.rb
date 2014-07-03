@@ -1,3 +1,4 @@
+#Doesn't currently have a timer
 When(/^I activate it$/) do
   pending # express the regexp above with the code you wish you had
 end
@@ -7,10 +8,6 @@ Then(/^the bomb's timer should start counting down from its current state$/) do
 end
 
 When(/^the timer reaches (\d+)$/) do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
-
-Given(/^an exploded bomb$/) do
   pending # express the regexp above with the code you wish you had
 end
 

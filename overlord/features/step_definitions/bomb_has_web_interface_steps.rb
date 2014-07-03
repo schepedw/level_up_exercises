@@ -1,24 +1,22 @@
-Given(/^a bomb$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
-When(/^I visit the page$/) do
-  eending # express the regexp above with the code you wish you had
+When(/^I am on the home page$/) do
+  visit "/"
 end
 
 Then(/^I should see the bomb's status$/) do
-  pending # express the regexp above with the code you wish you had
+  status = find(:css, 'span.state').text
+  length = status.strip.length
+  expect(length).to be > 0
+  expect(status).to eql("inactive")
 end
 
 Then(/^I should see a field to enter the activation\/deactivation code$/) do
-  pending # express the regexp above with the code you wish you had
+  form = find(:css, '#code_input')
+  expect(form).to be_truthy
 end
 
 Then(/^I should see a submit button with which to submit the activation\/deactivation code$/) do
-  pending # express the regexp above with the code you wish you had
+  button = find(:css, '#activation_button')
+  expect(button).to be_truthy
 end
 
-Then(/^I should see a timer displaying a countdown to explosion$/) do
-  pending # express the regexp above with the code you wish you had
-end
 
