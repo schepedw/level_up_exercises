@@ -7,4 +7,4 @@ gem 'aasm'
 gem 'sinatra-activerecord'
 gem 'pg'
 gem 'cucumber'
-
+ruby "2.0.0"

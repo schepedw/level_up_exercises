@@ -1,3 +1,4 @@
+# Killer facts about triangles AWW YEAH
 class Triangle
 	attr_accessor :side1,:side2,:side3
 
@@ -17,14 +18,13 @@ class Triangle
 		!(equalateral || isosceles)
 	end
 
-	def recite_facts
-		puts 'This triangle is equalateral!' if equalateral 
-		puts 'This triangle is isosceles! Also,that word is hard to type.' if isosceles
-		puts 'This triangle is scalene and mathematically boring.' if scalene 
 
+	def recite_facts
+		puts 'This triangle is equilateral!' if equalateral 
+		puts 'This triangle is isosceles! Also, that word is hard to type.' if isosceles 
+		puts 'This triangle is scalene and mathematically boring.' if scalene 
 		angles = self.calculate_angles(side1, side2, side3)
 		puts 'The angles of this triangle are ' + angles.join(',')
-
 		puts 'This triangle is also a right triangle!' if angles.include? 90
 		puts ''
 	end
