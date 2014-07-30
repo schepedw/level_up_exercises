@@ -1,0 +1,7 @@
+<div class = "email-summary">
+  <div class = "icon"> <a href = "#" ><i class = "fa fa-square-o larger opaque"></i></a></div>
+  <div class = "icon"> <a href = <%=email_path(email)%> ><i class = "fa fa-star-o larger opaque"></i></a></div>
+  <div class = "sender"> <%= email.sender %> </div>
+  <div class = "subject-body"> <%= email.subject %> -<span class = "opaque"><%= email.body %></span> </div>
+  <div class = "date"> <%= email.send_date.to_date %> </div>
+</div>

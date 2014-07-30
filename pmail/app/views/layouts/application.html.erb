@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Inbox</title>
+
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+    <%= render 'layouts/navigation' %>
+    <%= render 'layouts/lower_nav.html' %>
+    <div class = "outer row full-page">
+      <%= render "layouts/left_nav"%>
+      <%= yield %>
+    </div>
+    <%= javascript_include_tag "application" %>
+  </body>
+</html>

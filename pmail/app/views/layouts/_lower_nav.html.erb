@@ -1,0 +1,82 @@
+<div class = "row full-page lower-nav">
+  <div class = "small-2 columns">
+    <a href ="#" class = "mail red" data-dropdown="pmail-dropdown">Pmail <i class = "fa fa-caret-down"></i></a>
+    <ul id = "pmail-dropdown" class = "narrow f-dropdown" data-dropdown-content>
+      <li><a href = "#" class = "dd-link">Mail</a> </li>
+      <li><a href = "#" class = "dd-link">Contacts </a> </li>
+      <li><a href = "#" class = "dd-link">Tasks</a> </li>
+    </ul>
+  </div>
+  <div class = "small-6 columns buttons">
+    <a href = "#" class = "has-tip tiny button" data-dropdown="marker-dropdown" data-tooltip title="Select"> 
+      <i class = "fa fa-square-o larger opaque "></i>
+      <i class = "fa fa-caret-down"></i>
+    </a>
+    <ul id = "marker-dropdown" class = "narrow f-dropdown" data-dropdown-content>
+      <li><a href = "#" class = "dd-link">All </a> </li>
+      <li><a href = "#" class = "dd-link">None </a> </li>
+      <li><a href = "#" class = "dd-link">Read </a> </li>
+      <li><a href = "#" class = "dd-link">Unread </a> </li>
+      <li><a href = "#" class = "dd-link">Starred</a> </li>
+      <li><a href = "#">Unstarred</a> </li>
+    </ul>
+    <a href = "#" class = "has-tip tiny  button" data-tooltip title="Refresh" ><i class = "fa fa-refresh larger"></i></a>
+    <a href = "#" class = "tiny  button" data-dropwdown="more-dropdown" >
+      More 
+      <i class = "fa fa-caret-down"></i>
+    </a>
+    <ul id = "more-dropdown" class = "f-dropdown" data-dropdown-content>
+      <li><a href = "#" class = "dd-link">All </a> </li>
+      <li><a href = "#" class = "dd-link">None </a> </li>
+    </ul>
+  </div>
+  <div class = "small-4 columns right-buttons">
+    <div class = "row">
+      <div class ="small-3 columns">
+        <span ><strong> 1-x </strong> of <strong> <%=Email.all.count %> </strong></span>
+      </div>
+      <div class = "small-4 columns">
+        <ul class = "button-group radius ">
+          <li>
+            <a href = "#" data-tooltip class = "has-tip tiny button" title="Newer" ><i class = "fa fa-chevron-left opaque" ></i></a>
+          </li>
+          <li>
+            <a href = "#" data-tooltip class = "has-tip tiny button" title="Older"><i class = "fa fa-chevron-right opaque" ></i></a>
+          </li>
+        </ul>
+      </div>
+      <div class = "small-5 columns">
+        <a href = "#" class = "has-tip tiny button" data-options = "align:left" data-dropdown="settings-dropdown" data-tooltip title="Settings" >
+          <i class = "fa fa-gear larger"></i>
+          <i class = "fa fa-caret-down opaque"></i>
+        </a>
+        <ul id = "settings-dropdown" class = "f-dropdown settings"  data-dropdown-content>
+          <label> Display Options </label>
+              <li>
+                <input type = "radio" name = "display" value = "Comfortable" id = "comfortable"</input> 
+                <label for ="comfortable">Comfortable</label>
+              </li>
+              <li>
+                <input type = "radio" name = "display" value = "Cozy" id = "cozy"</input> 
+                <label for ="cozy">Cozy</label>
+              </li>
+              <li>
+                <input type = "radio" name = "display" value = "Compact" id = "compact"</input> 
+                <label for ="compact">Compact</label>
+              </li>
+            <hr />
+            <li> <a href = "#" class = "dd-link">Configure Inbox</a></li>
+            <hr />
+            <li> <a href = "#" class = "dd-link">Settings</a></li>
+            <li> <a href = "#" class = "dd-link">Themes</a></li>
+            <li> <a href = "#" class = "dd-link">Send Feedback</a></li>
+            <li> <a href = "#" class = "dd-link">Help</a></li>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+  <hr />
+

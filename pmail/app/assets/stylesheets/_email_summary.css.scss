@@ -1,0 +1,47 @@
+.email-summary{
+  max-height: 40px;
+  min-height: 20px;
+  height: 30px;
+  padding-left:4px;
+  line-height: 18px;
+  background:#f1f1f1;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  width:98%;
+  display:inline-block;
+  white-space: nowrap;
+  div{
+    font-size: 10.5pt;
+    font-family: arial, sans-serif;
+    display:inline-block;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: clip;
+  }
+  .icon{
+    width: 21px;
+    padding-top: 4px;
+    a{
+      color:gray; 
+    }
+    a:hover{
+      opacity: 0.3;
+    }
+  }
+  .sender{
+    margin-right:15px;
+    width: 200px;
+  }
+  .subject-body{
+    max-width: calc(70% - 121px);
+    min-width: 175px;
+    padding-right:10px;
+  }
+  .body{
+    width: 15%;
+  }
+  .date{
+    position:relative;
+    left:100px;
+  }
+
+}
