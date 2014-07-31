@@ -1,6 +1,6 @@
-<!-- Remember, this is inside     <div class = "outer row full-page">  and the left nav takes 1 column-->
-<div class = "message-container" >
-  <%Email.all.each do |e|%>
+<!-- Remember, this is inside     <div class = "outer row full-page"> --> 
+<div class="message-container" >
+  <% Email.all.each do |e| %>
     <%= render "emails/summary", email: e %>
   <% end %>
 </div>

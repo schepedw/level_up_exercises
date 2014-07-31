@@ -40,8 +40,9 @@
     width: 15%;
   }
   .date{
-    position:relative;
-    left:100px;
+    position:absolute;
+    right:44px;
+    max-width: calc(13% - 86px);
   }
 
 }
